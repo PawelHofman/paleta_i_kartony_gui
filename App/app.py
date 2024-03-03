@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import Image, ImageTk  # Dodane importy do obsługi obrazów
 
 class Karton:
     def __init__(self, nazwa, wysokosc, szerokosc, dlugosc):
@@ -34,11 +35,18 @@ class App:
 
     def dodaj_karton(self, event):
         nazwa_kartona = "Karton" + str(len(self.kartony) + 1)
-        nowy_karton = Karton(nazwa_kartona, 20, 50, 70)
-        karton_id = self.canvas.create_rectangle(event.x, event.y, event.x + nowy_karton.szerokosc,
-                                                 event.y + nowy_karton.dlugosc, fill="blue")
-        self.kartony.append((nowy_karton, karton_id))
-        print("Dodano: " + nazwa_kartona)
+        szerokosc = 50
+        dlugosc = 50 
+        wysokosc = 70
+        nowy_karton = Karton(nazwa_kartona, wysokosc, szerokosc, dlugosc)
+        # Dodane wczytywanie obrazu i konwersja na format PhotoImage
+        obraz_kartona = Image.open("paleta_i_kartony_gui\\Graph\\karton.jpg")  # Wczytaj obraz kartonu
+        obraz_kartona = obraz_kartona.resize((nowy_karton.szerokosc, nowy_karton.dlugosc))
+        obraz_kartona = ImageTk.PhotoImage(obraz_kartona)
+
+        karton_id = self.canvas.create_image(event.x, event.y, anchor=tk.NW, image=obraz_kartona)
+        self.kartony.append((nowy_karton, karton_id, obraz_kartona))
+        print("Dodano: " + nazwa_kartona + " o X: " + str(szerokosc) + " o Y: " + str(dlugosc))
 
     def przemiesc_karton(self, event):
         self.zacznij_przenoszenie(event)
