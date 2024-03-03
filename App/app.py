@@ -18,16 +18,18 @@ class App:
         self.master = master
         self.paleta = Paleta(800*0.7, 1200*0.7)
         self.kartony = []
+        self.zlapany_karton_flag = False
 
         # Etykieta "Paleta i Kartony"
-        self.etykieta = tk.Label(master, text="Paleta i Kartony", font=("Arial", 14))
-        self.etykieta.pack()
+        # self.etykieta = tk.Label(master, text="Paleta i Kartony", font=("Arial", 14))
+        # self.etykieta.pack()
 
         self.canvas = tk.Canvas(master, width=self.paleta.szerokosc, height=self.paleta.dlugosc, bg="brown")
         self.canvas.pack()
 
         self.canvas.bind("<Button-1>", self.dodaj_karton)
         self.canvas.bind("<B3-Motion>", self.przemiesc_karton)
+        self.canvas.bind("<ButtonRelease-3>", self.zakoncz_przenoszenie)
         self.przenoszony_karton = None
 
     def dodaj_karton(self, event):
@@ -46,10 +48,14 @@ class App:
 
     def znajdz_karton(self, event):
         x, y = event.x, event.y
-        for karton, karton_id in self.kartony:
-            x1, y1, x2, y2 = self.canvas.coords(karton_id)
-            if x1 <= x <= x2 and y1 <= y <= y2:
-                return karton, karton_id
+        print("Odczyt z myszki: " + str(x) + " " + str(y))
+        if not(self.zlapany_karton_flag):
+            for karton, karton_id in self.kartony:
+                x1, y1, x2, y2 = self.canvas.coords(karton_id)
+                if x1 <= x <= x2 and y1 <= y <= y2:
+                    self.zlapany_karton_flag = True
+                    print("Zlapano karton")
+                    return karton, karton_id
         return None
 
     def zacznij_przenoszenie(self, event):
@@ -58,7 +64,10 @@ class App:
             self.przenoszony_karton = karton_info
 
     def zakoncz_przenoszenie(self, event):
-        self.przenoszony_karton = None
+        if self.zlapany_karton_flag:
+            self.zlapany_karton_flag = False
+            self.przenoszony_karton = None
+            print("Puszczono zlapany karton")
 
 if __name__ == "__main__":
     root = tk.Tk()
