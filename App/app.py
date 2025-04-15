@@ -18,7 +18,7 @@ class Paleta:
 class App:
     def __init__(self, master):
         self.master = master
-        self.paleta = Paleta(800*0.7, 1200*0.7)
+        self.paleta = Paleta(400, 600)
         self.kartony = []
         self.zlapany_karton_flag = False
 
@@ -29,7 +29,7 @@ class App:
         self.canvas = tk.Canvas(master, width=self.paleta.szerokosc, height=self.paleta.dlugosc, bg="brown")
         self.canvas.pack()
 
-        self.canvas.bind("<Button-1>", lambda event: self.dodaj_karton(event, dlugosc=150, szerokosc=50, wysokosc=50, kat_obrotu=19))
+        self.canvas.bind("<Button-1>", lambda event: self.dodaj_karton(event, dlugosc=200, szerokosc=50, wysokosc=50, kat_obrotu=0))
         self.canvas.bind("<B3-Motion>", self.przemiesc_karton)
         self.canvas.bind("<ButtonRelease-3>", self.zakoncz_przenoszenie)
         self.przenoszony_karton = None
